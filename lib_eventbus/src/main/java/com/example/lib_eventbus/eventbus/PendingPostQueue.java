@@ -17,9 +17,10 @@
 package com.example.lib_eventbus.eventbus;
 
 final class PendingPostQueue {
-    private PendingPost head;
-    private PendingPost tail;
+    private PendingPost head;//头
+    private PendingPost tail;//尾
 
+    //消息入队
     synchronized void enqueue(PendingPost pendingPost) {
         if (pendingPost == null) {
             throw new NullPointerException("null cannot be enqueued");
@@ -35,6 +36,7 @@ final class PendingPostQueue {
         notifyAll();
     }
 
+    //取出1个消息
     synchronized PendingPost poll() {
         PendingPost pendingPost = head;
         if (head != null) {

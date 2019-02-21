@@ -59,8 +59,6 @@ class SubscriberMethodFinder {
      * 通过订阅者对象 找到订阅者方法集合
      * @param subscriberClass
      * @return 订阅者所有的订阅方法的集合
-     *
-     * 一句话介绍这方法的逻辑：
      * 1：通过订阅者对象在 METHOD_CACHE缓存中 中查找该订阅者是否已经存在有订阅者方法集合
      * 2：如果存在则直接返回
      * 3：未查询  继续
@@ -71,23 +69,23 @@ class SubscriberMethodFinder {
      * 6:订阅者对象为key，该订阅者对象所有的订阅方法为value放入缓冲池中
      */
     List<SubscriberMethod> findSubscriberMethods(Class<?> subscriberClass) {
-        List<SubscriberMethod> subscriberMethods = METHOD_CACHE.get(subscriberClass);
+        List<SubscriberMethod> subscriberMethods = METHOD_CACHE.get(subscriberClass);//注解1
         if (subscriberMethods != null) {
             return subscriberMethods;
         }
 
         if (ignoreGeneratedIndex) {
             //反射机制获取订阅者方法
-            subscriberMethods = findUsingReflection(subscriberClass);
+            subscriberMethods = findUsingReflection(subscriberClass);//注解2
         } else {
             //index形式获取订阅者方法
-            subscriberMethods = findUsingInfo(subscriberClass);
+            subscriberMethods = findUsingInfo(subscriberClass);//注解3
         }
         if (subscriberMethods.isEmpty()) {
             throw new EventBusException("Subscriber " + subscriberClass
                     + " and its super classes have no public methods with the @Subscribe annotation");
         } else {
-            METHOD_CACHE.put(subscriberClass, subscriberMethods);
+            METHOD_CACHE.put(subscriberClass, subscriberMethods);//注解4
             return subscriberMethods;
         }
     }
@@ -97,7 +95,7 @@ class SubscriberMethodFinder {
         findState.initForSubscriber(subscriberClass);//关联订阅者对象
         while (findState.clazz != null) {
             //通过index获取订阅者信息
-            findState.subscriberInfo = getSubscriberInfo(findState);
+            findState.subscriberInfo = getSubscriberInfo(findState);//获取订阅者信息
             if (findState.subscriberInfo != null) {
                 SubscriberMethod[] array = findState.subscriberInfo.getSubscriberMethods();
                 for (SubscriberMethod subscriberMethod : array) {
@@ -232,7 +230,7 @@ class SubscriberMethodFinder {
 
     /**
      * SubscriberMethodFinder的1个静态内部类
-     * 封装了所有订阅者和订阅方法的集合
+     * 封装了订阅者和所有订阅方法的集合
      * 主要功能就两个checkAdd与moveToSuperclsss
      */
     static class FindState {

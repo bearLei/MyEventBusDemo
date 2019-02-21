@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 final class PendingPost {
+
+    //对象缓存池
     private final static List<PendingPost> pendingPostPool = new ArrayList<PendingPost>();
 
     Object event;
@@ -34,6 +36,7 @@ final class PendingPost {
         synchronized (pendingPostPool) {
             int size = pendingPostPool.size();
             if (size > 0) {
+                //取出列表中的最后1个元素
                 PendingPost pendingPost = pendingPostPool.remove(size - 1);
                 pendingPost.event = event;
                 pendingPost.subscription = subscription;
